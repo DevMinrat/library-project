@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Читатели</title>
+</head>
+<body>
+
+<h1>Читатели</h1>
+<br>
+
+<div th:each="person: ${people}">
+    <a th:href="@{/people/{id}(id=${person.getId()})}"
+       th:text="${person.getFullName()} + ', ' + ${person.getBirthday()} "></a>
+</div>
+<br>
+<hr>
+<a th:href="@{/people/new}">Добавить читателя</a>
+
+</body>
+</html>

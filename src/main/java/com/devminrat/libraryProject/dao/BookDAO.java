@@ -4,11 +4,11 @@ import com.devminrat.libraryProject.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
 public class BookDAO {
     private JdbcTemplate jdbcTemplate;
 
@@ -22,8 +22,12 @@ public class BookDAO {
     }
 
     public Book getBook(int id) {
-        return jdbcTemplate.query("SELECT * FROM book WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
+        return jdbcTemplate.query("SELECT * FROM book WHERE id=?", new BeanPropertyRowMapper<>(Book.class), id)
                 .stream().findFirst().orElse(null);
+    }
+
+    public List<Book> getBooksByPersonId(int id) {
+        return jdbcTemplate.query("SELECT * FROM book WHERE personid=?", new BeanPropertyRowMapper<>(Book.class), id);
     }
 
     public void createBook(Book book) {

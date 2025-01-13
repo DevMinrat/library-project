@@ -1,9 +1,13 @@
 package com.devminrat.libraryProject.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Person {
     private int id;
     private String fullName;
     private int birthday;
+    private List<Book> books = new ArrayList<>();
 
     public Person() {
     }
@@ -36,5 +40,13 @@ public class Person {
 
     public void setBirthday(int birthday) {
         this.birthday = birthday;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 }

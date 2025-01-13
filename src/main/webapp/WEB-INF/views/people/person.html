@@ -8,12 +8,31 @@
     <title>Читатель</title>
 </head>
 
-<h1></h1>
+<h1>Читатель</h1>
 <br>
 
 <body>
-<span th:text="${person.getId()}"></span>
-<span th:text="${person.getFullName()}"></span>
-<span th:text="${person.getBirthday()}"></span>
+<h2 th:text="${person.getFullName()} + ', ' + ${person.getBirthday()}"></h2>
+
+<div th:if="${person.getBooks().isEmpty()}">
+    <h3>Читатель пока не взял ни одной книги</h3>
+</div>
+<div th:unless="${person.getBooks().isEmpty()}">
+    <h3>Книги</h3>
+    <div th:each="book: ${person.getBooks()}">
+        <p th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()} "></p>
+    </div>
+</div>
+
+
+
+<br>
+<hr>
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}" th:text="Редактировать"></a>
+
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+    <button type="submit">Удалить</button>
+</form>
+
 </body>
 </html>

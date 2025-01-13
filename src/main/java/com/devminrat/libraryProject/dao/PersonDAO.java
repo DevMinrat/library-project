@@ -4,11 +4,11 @@ import com.devminrat.libraryProject.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
 public class PersonDAO {
     private JdbcTemplate jdbcTemplate;
 
@@ -22,7 +22,8 @@ public class PersonDAO {
     }
 
     public Person getPerson(int id) {
-        return jdbcTemplate.query("SELECT * FROM person WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+        return jdbcTemplate.query("SELECT * FROM person WHERE person.id=?",
+                        new BeanPropertyRowMapper<>(Person.class), id)
                 .stream().findFirst().orElse(null);
     }
 

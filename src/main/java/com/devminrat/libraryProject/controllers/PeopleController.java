@@ -2,18 +2,23 @@ package com.devminrat.libraryProject.controllers;
 
 import com.devminrat.libraryProject.dao.PersonDAO;
 import com.devminrat.libraryProject.models.Person;
+import com.devminrat.libraryProject.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+//I used DAO and Service together to simplify project.
+
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
+    private final PersonService personService;
     private final PersonDAO personDAO;
 
     @Autowired
-    public PeopleController(final PersonDAO personDAO) {
+    public PeopleController(PersonService personService, final PersonDAO personDAO) {
+        this.personService = personService;
         this.personDAO = personDAO;
     }
 
@@ -44,6 +49,19 @@ public class PeopleController {
     @PatchMapping("/{id}")
     public String updatePerson(@ModelAttribute("person") final Person person, @PathVariable final int id) {
         personDAO.updatePerson(id, person);
+        return "redirect:/people";
+    }
+
+    @GetMapping("/{id}")
+    public String getPerson(@PathVariable final int id, Model model) {
+        final Person person = personService.getPerson(id);
+        model.addAttribute("person", person);
+        return "people/person";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deletePerson(@PathVariable final int id) {
+        personDAO.deletePerson(id);
         return "redirect:/people";
     }
 

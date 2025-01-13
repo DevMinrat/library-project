@@ -1,17 +1,30 @@
 package com.devminrat.libraryProject.models;
 
 public class Book {
+    private int id;
     private String name;
     private String author;
     private int year;
     private int pages;
     private String personId;
 
-    public Book(String name, String author, int year, int pages) {
+    public Book() {
+    }
+
+    public Book(int id, String name, String author, int year, int pages) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.year = year;
         this.pages = pages;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

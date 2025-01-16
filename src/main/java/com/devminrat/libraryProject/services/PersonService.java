@@ -5,7 +5,6 @@ import com.devminrat.libraryProject.dao.PersonDAO;
 import com.devminrat.libraryProject.models.Book;
 import com.devminrat.libraryProject.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Книга</title>
+</head>
+
+<h1>Книга</h1>
+<br>
+
+<body>
+<h2 th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()} "></h2>
+
+<div th:if="${book.getPersonId() == null}">
+    <h3>Эта книга свободна! Кому назначить ее?</h3>
+    <p>Выбирите человека: </p>
+
+    <form th:method="post" th:action="@{/books/{id}/setReader(id=${book.getId()})}">
+        <select name="personId">
+            <option th:each="human : ${people}" th:value="${human.getId()}"
+                    th:text="${human.getFullName()} + ', ' + ${human.getBirthday()}">
+            </option>
+        </select>
+        <button type="submit">Назначить книгу</button>
+    </form>
+</div>
+<div th:unless="${book.getPersonId() == null}">
+    <p>Книга сейчас у: </p>
+    <p th:text="${person.getFullName()} + ', ' + ${person.getBirthday()}"></p>
+    <br>
+    <form th:method="post" th:action="@{/books/{id}/freeBook(id=${book.getId()})}" th:object="${book}">
+        <button type="submit">Освободить книгу</button>
+    </form>
+
+</div>
+
+
+<br>
+<hr>
+<a th:href="@{/books/{id}/edit(id=${book.getId()})}" th:text="Редактировать"></a>
+
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
+    <button type="submit">Удалить</button>
+</form>
+
+</body>
+</html>

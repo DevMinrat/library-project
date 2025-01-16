@@ -17,6 +17,7 @@
 
     <label for="birthday">Введите год рождения: </label>
     <input type="text" id="birthday" name="birthday" value="0" th:field="*{birthday}">
+    <p style="color:red" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">Age Error</p>
 
     <br>
     <button type="submit">Редактировать</button>

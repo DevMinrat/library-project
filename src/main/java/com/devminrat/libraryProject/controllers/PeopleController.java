@@ -3,9 +3,11 @@ package com.devminrat.libraryProject.controllers;
 import com.devminrat.libraryProject.dao.PersonDAO;
 import com.devminrat.libraryProject.models.Person;
 import com.devminrat.libraryProject.services.PersonService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 //I used DAO and Service together to simplify project.
@@ -34,7 +36,10 @@ public class PeopleController {
     }
 
     @PostMapping
-    public String savePerson(@ModelAttribute("person") final Person person) {
+    public String savePerson(@ModelAttribute("person") @Valid final Person person, final BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "people/new";
+
         personDAO.createPerson(person);
         return "redirect:/people";
     }
@@ -47,7 +52,10 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String updatePerson(@ModelAttribute("person") final Person person, @PathVariable final int id) {
+    public String updatePerson(@ModelAttribute("person") @Valid final Person person, BindingResult bindingResult, @PathVariable final int id) {
+        if (bindingResult.hasErrors())
+            return "people/edit";
+
         personDAO.updatePerson(id, person);
         return "redirect:/people";
     }

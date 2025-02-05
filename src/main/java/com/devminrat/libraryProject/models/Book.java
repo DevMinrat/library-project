@@ -1,36 +1,45 @@
 package com.devminrat.libraryProject.models;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+@Entity
+@Table(name = "Book")
 public class Book {
+
+    @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name length should be between 2 and 30")
+    @Column
     private String name;
 
     @NotEmpty(message = "Author should not be empty")
     @Size(min = 2, max = 30, message = "Author length should be between 2 and 30")
+    @Column
     private String author;
 
     @Min(value = 0, message = "Year should be greater than 0")
+    @Column
     private int year;
 
-    @Min(value = 0, message = "Pages should be greater than 0")
-    private int pages;
-    private Integer personId;
+    @ManyToOne
+    @JoinColumn(name = "personid", referencedColumnName = "id")
+    private Person owner;
 
     public Book() {
     }
 
-    public Book(int id, String name, String author, int year, int pages) {
+    public Book(int id, String name, String author, int year) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.year = year;
-        this.pages = pages;
     }
 
     public int getId() {
@@ -65,19 +74,11 @@ public class Book {
         this.year = year;
     }
 
-    public int getPages() {
-        return pages;
+    public Person getOwner() {
+        return owner;
     }
 
-    public void setPages(int pages) {
-        this.pages = pages;
-    }
-
-    public Integer getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 }

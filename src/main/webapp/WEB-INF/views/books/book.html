@@ -14,7 +14,7 @@
 <body>
 <h2 th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()} "></h2>
 
-<div th:if="${book.getPersonId() == null}">
+<div th:if="${book.getOwner() == null}">
     <h3>Эта книга свободна! Кому назначить ее?</h3>
     <p>Выбирите человека: </p>
 
@@ -27,7 +27,7 @@
         <button type="submit">Назначить книгу</button>
     </form>
 </div>
-<div th:unless="${book.getPersonId() == null}">
+<div th:unless="${book.getOwner() == null}">
     <p>Книга сейчас у: </p>
     <p th:text="${person.getFullName()} + ', ' + ${person.getBirthday()}"></p>
     <br>

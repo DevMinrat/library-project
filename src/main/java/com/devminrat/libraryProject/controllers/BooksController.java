@@ -55,7 +55,7 @@ public class BooksController {
         if (bindingResult.hasErrors())
             return "books/edit";
 
-        bookDAO.updateBook(id, book);
+        bookDAO.updateBook(book);
         return "redirect:/books";
     }
 
@@ -63,11 +63,10 @@ public class BooksController {
     public String getBook(@PathVariable final int id, Model model) {
         final Book book = bookDAO.getBook(id);
 
-        if (book.getPersonId() == null) {
+        if (book.getOwner() == null) {
             model.addAttribute("people", personDAO.getPeople());
         } else {
-            Person person = personDAO.getPerson(book.getPersonId());
-            model.addAttribute("person", person);
+            model.addAttribute("person", book.getOwner());
         }
 
         model.addAttribute("book", book);
@@ -76,13 +75,13 @@ public class BooksController {
 
     @PostMapping("/{id}/freeBook")
     public String freeBook(@PathVariable final int id) {
-        bookDAO.updateBookReader(id);
+        bookDAO.updateBookReader(id, null);
         return "redirect:/books/{id}";
     }
 
     @PostMapping("/{id}/setReader")
     public String setReader(@PathVariable final int id, @RequestParam int personId) {
-        bookDAO.updateBookReader(personId, id);
+        bookDAO.updateBookReader(id, personId);
         return "redirect:/books/{id}";
     }
 

@@ -12,19 +12,13 @@ import java.util.List;
 @Service
 public class PersonService {
     private final PersonDAO personDAO;
-    private final BookDAO bookDAO;
 
     @Autowired
-    public PersonService(PersonDAO personDAO, BookDAO bookDAO) {
+    public PersonService(PersonDAO personDAO) {
         this.personDAO = personDAO;
-        this.bookDAO = bookDAO;
     }
 
     public Person getPerson(int id) {
-        Person person = personDAO.getPerson(id);
-        List<Book> books = bookDAO.getBooksByPersonId(id);
-
-        person.setBooks(books);
-        return person;
+        return personDAO.getPerson(id);
     }
 }

@@ -1,9 +1,7 @@
 package com.devminrat.libraryProject.controllers;
 
-import com.devminrat.libraryProject.dao.PersonDAO;
-import com.devminrat.libraryProject.models.Book;
 import com.devminrat.libraryProject.models.Person;
-import com.devminrat.libraryProject.services.PersonService;
+import com.devminrat.libraryProject.services.PeopleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,25 +9,19 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-//I used DAO and Service together to simplify project.
-
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
-    private final PersonService personService;
-    private final PersonDAO personDAO;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PeopleController(PersonService personService, final PersonDAO personDAO) {
-        this.personService = personService;
-        this.personDAO = personDAO;
+    public PeopleController(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @GetMapping
     public String getPeople(final Model model) {
-        model.addAttribute("people", personDAO.getPeople());
+        model.addAttribute("people", peopleService.findAll());
         return "people/people";
     }
 
@@ -43,13 +35,13 @@ public class PeopleController {
         if (bindingResult.hasErrors())
             return "people/new";
 
-        personDAO.createPerson(person);
+        peopleService.save(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String editPerson(@PathVariable final int id, Model model) {
-        final Person person = personDAO.getPerson(id);
+        final Person person = peopleService.findById(id);
         model.addAttribute("person", person);
         return "people/edit";
     }
@@ -59,20 +51,20 @@ public class PeopleController {
         if (bindingResult.hasErrors())
             return "people/edit";
 
-        personDAO.updatePerson(id, person);
+        peopleService.update(id, person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}")
     public String getPerson(@PathVariable final int id, Model model) {
-        final Person person = personService.getPerson(id);
+        final Person person = peopleService.findById(id);
         model.addAttribute("person", person);
         return "people/person";
     }
 
     @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable final int id) {
-        personDAO.deletePerson(id);
+        peopleService.deleteById(id);
         return "redirect:/people";
     }
 

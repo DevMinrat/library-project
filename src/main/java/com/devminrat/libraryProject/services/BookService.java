@@ -4,6 +4,8 @@ import com.devminrat.libraryProject.models.Book;
 import com.devminrat.libraryProject.models.Person;
 import com.devminrat.libraryProject.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,14 @@ public class BookService {
 
     public List<Book> findAll() {
         return bookRepository.findAll();
+    }
+
+    public List<Book> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable).getContent();
+    }
+
+    public List<Book> findByName(String name) {
+        return bookRepository.findByNameStartingWith(name);
     }
 
     public Book findById(int id) {

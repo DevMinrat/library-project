@@ -4,11 +4,18 @@ import com.devminrat.libraryProject.models.Book;
 import com.devminrat.libraryProject.services.BookService;
 import com.devminrat.libraryProject.services.PeopleService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -23,8 +30,15 @@ public class BooksController {
     }
 
     @GetMapping
-    public String getBooks(final Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String getBooks(
+            @RequestParam(defaultValue = "0") @Min(0) Integer page,
+            @RequestParam(value = "books_per_page", defaultValue = "100") @Min(1) @Max(200) Integer limit,
+            @RequestParam(value = "sort_by_year", defaultValue = "false") Boolean sortByYear,
+            final Model model) {
+
+        Sort sorting = sortByYear ? Sort.by("year") : Sort.unsorted();
+        model.addAttribute("books", bookService.findAll(
+                PageRequest.of(page, limit, sorting)));
         return "books/books";
     }
 
@@ -88,5 +102,17 @@ public class BooksController {
     public String deleteBook(@PathVariable final int id) {
         bookService.delete(id);
         return "redirect:/books";
+    }
+
+    @GetMapping("/search")
+    public String searchBook(@ModelAttribute("book") final Book book) {
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String searchBook(@RequestParam(defaultValue = "") String name,
+                             @ModelAttribute("book") final Book book, Model model) {
+        model.addAttribute("books", bookService.findByName(name));
+        return "books/search";
     }
 }

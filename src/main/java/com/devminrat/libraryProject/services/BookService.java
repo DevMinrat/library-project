@@ -4,11 +4,11 @@ import com.devminrat.libraryProject.models.Book;
 import com.devminrat.libraryProject.models.Person;
 import com.devminrat.libraryProject.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -61,9 +61,11 @@ public class BookService {
         if (book != null) {
             if (personId == null) {
                 book.setOwner(null);
+                book.setCheckoutDate(null);
             } else {
                 Person person = peopleService.findById(personId);
                 book.setOwner(person);
+                book.setCheckoutDate(OffsetDateTime.now());
             }
         }
     }

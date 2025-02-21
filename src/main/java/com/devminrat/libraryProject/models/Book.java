@@ -5,9 +5,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import java.time.OffsetDateTime;
+
 @Entity
 @Table(name = "Book")
 public class Book {
+    private static final int OVERDUE_DAYS = 10;
 
     @Id
     @Column
@@ -31,6 +34,12 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "personid", referencedColumnName = "id")
     private Person owner;
+
+    @Column(name = "checkout_date")
+    private OffsetDateTime checkoutDate;
+
+    @Transient
+    private boolean overdue;
 
     public Book() {
     }
@@ -80,5 +89,17 @@ public class Book {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public OffsetDateTime getCheckoutDate() {
+        return checkoutDate;
+    }
+
+    public void setCheckoutDate(OffsetDateTime checkoutDate) {
+        this.checkoutDate = checkoutDate;
+    }
+
+    public boolean isOverdue() {
+        return getCheckoutDate() != null && getCheckoutDate().isBefore(OffsetDateTime.now().minusDays(OVERDUE_DAYS));
     }
 }
